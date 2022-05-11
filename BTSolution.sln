@@ -5,9 +5,9 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTSolution", "BTSolution\BTSolution.csproj", "{19E39AB8-C6FD-4B2D-9B7D-8F6FB6E0CC6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTSolution.DAL", "BTSolution.DAL\BTSolution.DAL.csproj", "{C6CE0E98-B08C-4300-A8C6-89242D8CBE5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTSolution.DAL", "BTSolution.DAL\BTSolution.DAL.csproj", "{C6CE0E98-B08C-4300-A8C6-89242D8CBE5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTSolution.BL", "BTSolution.BL\BTSolution.BL.csproj", "{1E450960-176B-427C-AA15-EE477715079B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTSolution.BL", "BTSolution.BL\BTSolution.BL.csproj", "{1E450960-176B-427C-AA15-EE477715079B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

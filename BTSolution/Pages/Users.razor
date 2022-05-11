@@ -1,0 +1,47 @@
+﻿@page "/users"
+@using BTSolution.Data
+@using BTSolution.DAL.DTO
+
+<PageTitle>Users</PageTitle>
+@inject UserService _userService
+
+<h1 class="mt-5">Users</h1>
+<button type="button" class="btn btn-primary mb-3">Add new user</button>
+
+@if (users == null) {
+    <p>
+        <em>Loading...</em>
+    </p>
+} else {
+    if (!users.Any()) {
+        <p>
+            <em>User table is empty, please add a new one</em>
+        </p>
+    } else {
+        <table class="table">
+            <thead>
+            <tr>
+                <th>UserId</th>
+                <th>UserName</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in users) {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.UserName</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private IEnumerable<UserDTO>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await _userService.GetUsers();
+    }
+}
