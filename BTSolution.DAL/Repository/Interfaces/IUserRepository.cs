@@ -13,11 +13,11 @@ public interface IUserRepository
 {
     #region Methods - Public
 
-    void AddUser(UserDTO userDTO);
-    void DeleteUser(int id);
-    UserDTO GetUserById(int id);
+    void AddUser(UserDTO userDto);
+    void DeleteUser(int userId);
+    UserDTO GetUserById(int userId);
     IEnumerable<UserDTO> GetUsers();
-    void UpdateUser(UserDTO userDTO);
+    void UpdateUser(UserDTO userDto);
 
     #endregion
 }

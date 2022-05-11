@@ -39,18 +39,18 @@ public class UserRepository : IUserRepository
 
     #region Interface Members
 
-    public void AddUser(UserDTO userDTO)
+    public void AddUser(UserDTO userDto)
     {
-        _ = userDTO ?? throw new DbUpdateException();
+        _ = userDto ?? throw new DbUpdateException();
 
-        User? user = _mapper.Map<User>(userDTO);
+        User? user = _mapper.Map<User>(userDto);
         _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
     }
 
-    public void DeleteUser(int id)
+    public void DeleteUser(int userId)
     {
-        UserDTO? user = GetUserById(id);
+        UserDTO? user = GetUserById(userId);
         _ = user ?? throw new DataException();
 
         UserDTO? userDTO = _mapper.Map<UserDTO>(user);
@@ -76,12 +76,12 @@ public class UserRepository : IUserRepository
         return usersDTO;
     }
 
-    public void UpdateUser(UserDTO userDTO)
+    public void UpdateUser(UserDTO userDto)
     {
-        User? user = _dbContext.Users.FirstOrDefault(user => user.UserId == userDTO.UserId);
+        User? user = _dbContext.Users.FirstOrDefault(user => user.UserId == userDto.UserId);
         _ = user ?? throw new DataException();
 
-        UserDTO? newUser = _mapper.Map<UserDTO>(userDTO);
+        UserDTO? newUser = _mapper.Map<UserDTO>(userDto);
         _dbContext.Entry(user).CurrentValues.SetValues(newUser);
         _dbContext.SaveChanges();
     }

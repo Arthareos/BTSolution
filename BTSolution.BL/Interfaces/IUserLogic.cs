@@ -4,18 +4,20 @@
 //  </Copyright>
 //  --------------------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
+using BTSolution.DAL.DTO;
 
 
-namespace BTSolution.DAL.Entities;
+namespace BTSolution.BL.Interfaces;
 
-public class User
+public interface IUserLogic
 {
-    #region Properties
+    #region Methods - Public
 
-    [Key] public int UserId { get; set; }
-
-    [Required] public string UserName { get; set; }
+    void AddUser(UserDTO userDto);
+    void DeleteUser(int userId);
+    UserDTO GetUserById(int userId);
+    IEnumerable<UserDTO> GetUsers();
+    void UpdateUser(UserDTO userDto);
 
     #endregion
 }

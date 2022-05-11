@@ -14,9 +14,9 @@ public interface IAccessTokenRepository
     #region Methods - Public
 
     void CreateToken(int userId);
+    IEnumerable<AccessTokenDTO> GetAccessTokensByUserId(int userId);
+    IEnumerable<AccessTokenDTO> GetAllAccessTokens();
     int GetNumberOfTokens();
-    IEnumerable<AccessTokenDTO> GetAllTokens();
-    IEnumerable<AccessTokenDTO> GetTokensByUserId(int id);
 
     #endregion
 }

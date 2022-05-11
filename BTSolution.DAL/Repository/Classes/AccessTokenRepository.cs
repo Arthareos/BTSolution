@@ -41,7 +41,7 @@ public class AccessTokenRepository : IAccessTokenRepository
     {
         string token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
 
-        AccessTokenDTO accessTokenDTO = new(){
+        AccessTokenDTO accessTokenDTO = new() {
             CreationDate = DateTime.Now,
             Token = token,
             UserId = userId,
@@ -53,12 +53,16 @@ public class AccessTokenRepository : IAccessTokenRepository
         _dbContext.SaveChanges();
     }
 
-    public int GetNumberOfTokens()
+    public IEnumerable<AccessTokenDTO> GetAccessTokensByUserId(int userId)
     {
-        return _dbContext.AccessTokens.ToList().Count;
+        List<AccessToken>? accessTokens = _dbContext.AccessTokens.Where(token => token.UserId == userId).ToList();
+        _ = accessTokens ?? throw new DataException();
+
+        List<AccessTokenDTO> accessTokenDtos = _mapper.Map<List<AccessTokenDTO>>(accessTokens);
+        return accessTokenDtos;
     }
 
-    public IEnumerable<AccessTokenDTO> GetAllTokens()
+    public IEnumerable<AccessTokenDTO> GetAllAccessTokens()
     {
         List<AccessToken>? accessTokens = _dbContext.AccessTokens.ToList();
         _ = accessTokens ?? throw new DataException();
@@ -67,13 +71,9 @@ public class AccessTokenRepository : IAccessTokenRepository
         return accessTokenDtos;
     }
 
-    public IEnumerable<AccessTokenDTO> GetTokensByUserId(int userId)
+    public int GetNumberOfTokens()
     {
-        List<AccessToken>? accessTokens = _dbContext.AccessTokens.Where(token => token.UserId == userId).ToList();
-        _ = accessTokens ?? throw new DataException();
-
-        List<AccessTokenDTO> accessTokenDtos = _mapper.Map<List<AccessTokenDTO>>(accessTokens);
-        return accessTokenDtos;
+        return _dbContext.AccessTokens.ToList().Count;
     }
 
     #endregion

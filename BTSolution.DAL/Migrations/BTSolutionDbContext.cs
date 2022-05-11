@@ -15,7 +15,9 @@ public class BTSolutionDbContext : DbContext
 {
     #region Constructors
 
-    public BTSolutionDbContext(DbContextOptions<BTSolutionDbContext> options) : base(options) {}
+    public BTSolutionDbContext(DbContextOptions<BTSolutionDbContext> options) : base(options)
+    {
+    }
 
     #endregion
 

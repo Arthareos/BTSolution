@@ -4,18 +4,19 @@
 //  </Copyright>
 //  --------------------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
+using BTSolution.DAL.DTO;
 
 
-namespace BTSolution.DAL.Entities;
+namespace BTSolution.BL.Interfaces;
 
-public class User
+public interface IAccessTokenLogic
 {
-    #region Properties
+    #region Methods - Public
 
-    [Key] public int UserId { get; set; }
-
-    [Required] public string UserName { get; set; }
+    void CreateToken(int userId);
+    IEnumerable<AccessTokenDTO> GetAccessTokensByUserId(int userId);
+    IEnumerable<AccessTokenDTO> GetAllAccessTokens();
+    int GetNumberOfTokens();
 
     #endregion
 }
