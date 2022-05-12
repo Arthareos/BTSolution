@@ -5,7 +5,6 @@
 //   --------------------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace BTSolution.API.Models;
@@ -18,9 +17,13 @@ public class AccessToken
 
     [Required] public DateTime CreationDate { get; set; } = DateTime.Now;
 
+    [Required] public int Duration { get; set; } = 0;
+
     [Required] public string Token { get; set; } = string.Empty;
 
     [Required] public User User { get; set; }
+
+    [Required] public int UserId { get; set; }
 
     #endregion
 }

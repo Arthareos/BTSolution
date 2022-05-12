@@ -13,8 +13,19 @@ namespace BTSolution.API.Data;
 
 public class DataContext : DbContext
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options) {}
+    #region Constructors
+
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    {
+    }
+
+    #endregion
+
+    #region Properties
+
+    public DbSet<AccessToken> AccessTokens { get; set; }
 
     public DbSet<User> Users { get; set; }
-    public DbSet<AccessToken> AccessTokens { get; set; }
+
+    #endregion
 }
