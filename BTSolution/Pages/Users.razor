@@ -1,19 +1,45 @@
 ﻿@page "/users"
 @using BTSolution.Data
 @using BTSolution.DAL.DTO
+@using System.Runtime.CompilerServices
 
 <PageTitle>Users</PageTitle>
-@inject UserService _userService
+@inject UserService UserService
+@inject IJSRuntime JsRuntime
 
 <h1 class="mt-5">Users</h1>
-<button type="button" class="btn btn-primary mb-3">Add new user</button>
+<button type="button" class="btn btn-primary mb-3" @onclick="OpenModal">Add new user</button>
 
-@if (users == null) {
+@if (_isModalVisible) {
+    <div id="add-user-modal" class="modal" tabindex="-1" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add new user</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="name" placeholder="Name" @bind="_userDTO.UserName">
+                        <label for="name">Name</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="CloseModal">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="CreateUser">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (_users == null) {
     <p>
         <em>Loading...</em>
     </p>
 } else {
-    if (!users.Any()) {
+    if (!_users.Any()) {
         <p>
             <em>User table is empty, please add a new one</em>
         </p>
@@ -26,7 +52,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var user in users) {
+            @foreach (UserDTO user in _users) {
                 <tr>
                     <td>@user.UserId</td>
                     <td>@user.UserName</td>
@@ -38,10 +64,30 @@
 }
 
 @code {
-    private IEnumerable<UserDTO>? users;
+    private IEnumerable<UserDTO>? _users;
+    private bool _isModalVisible = false;
+    private UserDTO _userDTO = new();
 
     protected override async Task OnInitializedAsync()
     {
-        users = await _userService.GetUsers();
+        _users = await UserService.GetUsers();
+    }
+
+    private async void CreateUser()
+    {
+        _userDTO.UserId = await UserService.GetUserCount();
+        await Task.Run(() => UserService.AddUser(_userDTO));
+        CloseModal();
+    }
+
+    private void OpenModal()
+    {
+        _isModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        _isModalVisible = false;
+        _userDTO = new UserDTO();
     }
 }

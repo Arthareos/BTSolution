@@ -18,6 +18,7 @@ public interface IUserLogic
     UserDTO GetUserById(int userId);
     IEnumerable<UserDTO> GetUsers();
     void UpdateUser(UserDTO userDto);
+    public int GetUserCount();
 
     #endregion
 }

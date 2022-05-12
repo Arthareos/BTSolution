@@ -60,7 +60,7 @@ public class UserRepository : IUserRepository
 
     public UserDTO GetUserById(int userId)
     {
-        User? user = _dbContext.Users.FirstOrDefault(user => user.UserId == userId);
+        User? user = _dbContext.Users.AsNoTracking().FirstOrDefault(user => user.UserId == userId);
         _ = user ?? throw new DataException();
 
         UserDTO? userDTO = _mapper.Map<UserDTO>(user);
@@ -69,7 +69,7 @@ public class UserRepository : IUserRepository
 
     public IEnumerable<UserDTO> GetUsers()
     {
-        List<User>? users = _dbContext.Users.ToList();
+        List<User>? users = _dbContext.Users.AsNoTracking().ToList();
         _ = users ?? throw new DataException();
 
         List<UserDTO> usersDTO = _mapper.Map<List<UserDTO>>(users);
@@ -78,12 +78,17 @@ public class UserRepository : IUserRepository
 
     public void UpdateUser(UserDTO userDto)
     {
-        User? user = _dbContext.Users.FirstOrDefault(user => user.UserId == userDto.UserId);
+        User? user = _dbContext.Users.AsNoTracking().FirstOrDefault(user => user.UserId == userDto.UserId);
         _ = user ?? throw new DataException();
 
         UserDTO? newUser = _mapper.Map<UserDTO>(userDto);
         _dbContext.Entry(user).CurrentValues.SetValues(newUser);
         _dbContext.SaveChanges();
+    }
+
+    public int GetUserCount()
+    {
+        return _dbContext.Users.AsNoTracking().ToList().Count;
     }
 
     #endregion

@@ -4,6 +4,10 @@
 //  </Copyright>
 //  --------------------------------------------------------------------------------------------
 
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
+
 using BTSolution.BL.Classes;
 using BTSolution.BL.Interfaces;
 using BTSolution.DAL.Migrations;
@@ -17,7 +21,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add DB context
 string connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddDbContext<BTSolutionDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<BTSolutionDbContext>(options => {
+    options.UseSqlServer(connectionString);
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -28,12 +34,20 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IAccessTokenRepository, AccessTokenRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
-builder.Services.AddTransient<IAccessTokenLogic, AccessTokenLogic>();
-builder.Services.AddTransient<IUserLogic, UserLogic>();
+builder.Services.AddScoped<IAccessTokenLogic, AccessTokenLogic>();
+builder.Services.AddScoped<IUserLogic, UserLogic>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AccessTokenService>();
 builder.Services.AddScoped<WeatherForecastService>();
+
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddBootstrap5Providers()
+    .AddFontAwesomeIcons();
 
 var app = builder.Build();
 

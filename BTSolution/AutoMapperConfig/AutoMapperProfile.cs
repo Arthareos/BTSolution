@@ -4,21 +4,23 @@
 //  </Copyright>
 //  --------------------------------------------------------------------------------------------
 
+using AutoMapper;
+
 using BTSolution.DAL.DTO;
+using BTSolution.DAL.Entities;
 
 
-namespace BTSolution.DAL.Repository.Interfaces;
+namespace BTSolution.AutoMapperConfig;
 
-public interface IUserRepository
+public class AutoMapperProfile : Profile
 {
-    #region Methods - Public
+    #region Constructors
 
-    void AddUser(UserDTO userDto);
-    void DeleteUser(int userId);
-    UserDTO GetUserById(int userId);
-    IEnumerable<UserDTO> GetUsers();
-    void UpdateUser(UserDTO userDto);
-    int GetUserCount();
+    public AutoMapperProfile()
+    {
+        CreateMap<User, UserDTO>().ReverseMap();
+        CreateMap<AccessToken, AccessTokenDTO>().ReverseMap();
+    }
 
     #endregion
 }

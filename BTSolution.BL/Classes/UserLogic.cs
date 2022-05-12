@@ -77,5 +77,17 @@ public class UserLogic : IUserLogic
         }
     }
 
+    public int GetUserCount()
+    {
+        try
+        {
+            return _userRepository.GetUserCount();
+        }
+        catch (DbException exception)
+        {
+            throw exception;
+        }
+    }
+
     #endregion
 }

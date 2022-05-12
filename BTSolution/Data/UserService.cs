@@ -29,14 +29,14 @@ public class UserService
 
     #region Methods - Public
 
-    public async void AddUser(UserDTO userDto)
+    public void AddUser(UserDTO userDto)
     {
-        await Task.Run(() => _userLogic.AddUser(userDto));
+        _userLogic.AddUser(userDto);
     }
 
-    public async void DeleteUser(int userId)
+    public void DeleteUser(int userId)
     {
-        await Task.Run(() => _userLogic.DeleteUser(userId));
+        _userLogic.DeleteUser(userId);
     }
 
     public async Task<UserDTO> GetUserById(int userId)
@@ -49,9 +49,14 @@ public class UserService
         return await Task.FromResult(_userLogic.GetUsers());
     }
 
-    public async void UpdateUser(UserDTO userDto)
+    public void UpdateUser(UserDTO userDto)
     {
-        await Task.Run(() => _userLogic.UpdateUser(userDto));
+        _userLogic.UpdateUser(userDto);
+    }
+
+    public async Task<int> GetUserCount()
+    {
+        return await Task.FromResult(_userLogic.GetUserCount());
     }
 
     #endregion
