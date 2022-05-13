@@ -87,7 +87,7 @@ public class AccessTokenController : ControllerBase
     /// </summary>
     /// <param name="userId">userId of the owner</param>
     [HttpGet("{userId}")]
-    public async Task<ActionResult<List<User>>> GetAllUserAccessToken(int userId)
+    public async Task<ActionResult<List<AccessToken>>> GetAllUserAccessToken(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
 
@@ -116,7 +116,7 @@ public class AccessTokenController : ControllerBase
     /// </summary>
     /// <param name="userId">userId of the owner</param>
     [HttpGet("{userId}")]
-    public async Task<ActionResult<List<User>>> GetValidUserAccessToken(int userId)
+    public async Task<ActionResult<List<AccessToken>>> GetValidUserAccessToken(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
 
