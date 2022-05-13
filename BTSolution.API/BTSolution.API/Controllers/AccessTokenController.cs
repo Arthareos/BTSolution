@@ -17,10 +17,16 @@ namespace BTSolution.API.Controllers;
 [ApiController]
 public class AccessTokenController : ControllerBase
 {
+    #region Static Members
+
+    private const int MinDurationInSeconds = 1;
+    private const int MaxDurationInSeconds = 60;
+
+    #endregion
+
     #region Members
 
     private readonly DataContext _context;
-    private const int MaxDurationInSeconds = 60;
 
     #endregion
 
@@ -48,8 +54,12 @@ public class AccessTokenController : ControllerBase
         if (user == null)
             return BadRequest("User not found.");
 
-        if (durationInSeconds > MaxDurationInSeconds)
-            return BadRequest($@"Duration greater than {MaxDurationInSeconds}, this is not permitted under current policy.");
+        switch (durationInSeconds) {
+            case < MinDurationInSeconds:
+                return BadRequest($@"Duration smaller than {MinDurationInSeconds}, this is not permitted under current policy.");
+            case > MaxDurationInSeconds:
+                return BadRequest($@"Duration greater than {MaxDurationInSeconds}, this is not permitted under current policy.");
+        }
 
         var token = new AccessToken {
             CreationDate = DateTime.Now,
@@ -75,7 +85,7 @@ public class AccessTokenController : ControllerBase
     /// <summary>
     ///     Returns all the AccessTokens in the db (expired included) owned by the user
     /// </summary>
-    /// /// <param name="userId">userId of the owner</param>
+    /// <param name="userId">userId of the owner</param>
     [HttpGet("{userId}")]
     public async Task<ActionResult<List<User>>> GetAllUserAccessToken(int userId)
     {
@@ -104,7 +114,7 @@ public class AccessTokenController : ControllerBase
     /// <summary>
     ///     Returns all the AccessTokens in the db (expired excluded) owned by the user
     /// </summary>
-    /// /// <param name="userId">userId of the owner</param>
+    /// <param name="userId">userId of the owner</param>
     [HttpGet("{userId}")]
     public async Task<ActionResult<List<User>>> GetValidUserAccessToken(int userId)
     {
