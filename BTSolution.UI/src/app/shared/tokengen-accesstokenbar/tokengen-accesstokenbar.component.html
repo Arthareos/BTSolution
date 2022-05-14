@@ -1,0 +1,14 @@
+<div id="accesstokenbar-container">
+  <div id="usaccesstokenbarerbar-toolbar" class="d-flex">
+    <div class="p-2">
+      <p class="fw-bold" *ngIf="this.accessTokens.length == 0">Currently there are no valid AccessTokens</p>
+      <p class="fw-bold" *ngIf="this.accessTokens.length == 1">Currently there is {{this.accessTokens.length}} valid AccessToken</p>
+      <p class="fw-bold" *ngIf="this.accessTokens.length > 1">Currently there are {{this.accessTokens.length}} valid AccessTokens</p>
+    </div>
+    <div class="ms-auto p-2">
+      <button type="button" class="btn btn-primary ms-2">Add</button>
+      <button type="button" class="btn btn-primary ms-2" *ngIf="this.accessTokens.length > 0">Show all</button>
+    </div>
+  </div>
+</div>
+

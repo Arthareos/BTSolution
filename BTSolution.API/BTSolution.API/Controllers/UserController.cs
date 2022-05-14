@@ -88,7 +88,7 @@ public class UserController : ControllerBase
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
 
-        return Ok("User removed.");
+        return Ok();
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ public class UserController : ControllerBase
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
-        return Ok(user);
+        return Ok();
     }
 
     #endregion

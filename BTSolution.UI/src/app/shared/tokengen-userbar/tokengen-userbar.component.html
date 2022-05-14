@@ -1,0 +1,25 @@
+<div id="userbar-container">
+  <div id="userbar-toolbar" class="d-flex">
+    <div class="p-2">
+      <p class="fw-bold" *ngIf="this.users.length == 0">Currently there are no users registered</p>
+      <p class="fw-bold" *ngIf="this.users.length == 1">Currently there is {{this.users.length}} user registered</p>
+      <p class="fw-bold" *ngIf="this.users.length > 0">Currently there are {{this.users.length}} users registered</p>
+    </div>
+    <div class="ms-auto p-2">
+      <button type="button" class="btn btn-success ms-2">Add</button>
+      <button type="button" class="btn btn-primary ms-2"
+        (click)="this.showUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == false">Show all</button>
+      <button type="button" class="btn btn-primary ms-2"
+        (click)="this.hideUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == true">Hide all</button>
+    </div>
+  </div>
+  <div id="userlist" class="d-flex align-content-start flex-wrap mt-2"
+    *ngIf="this.isShowingUsers == true">
+    <app-tokengen-usercard
+      *ngFor="let user of this.users"
+      class="col-12"
+      [userId]="user.userId"
+      [userName]="user.userName"
+      ></app-tokengen-usercard>
+  </div>
+</div>
