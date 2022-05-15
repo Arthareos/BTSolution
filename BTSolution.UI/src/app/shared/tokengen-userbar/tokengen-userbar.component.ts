@@ -19,6 +19,10 @@ export class TokengenUserbarComponent implements OnInit {
   ngOnInit(): void {
     this.userService.refreshNeeded$.subscribe(() => this.getAllUsers())
     this.getAllUsers();
+
+    if (this.users.length == 0) {
+      this.isShowingUsers = false;
+    }
   }
 
   showUsers(): void {

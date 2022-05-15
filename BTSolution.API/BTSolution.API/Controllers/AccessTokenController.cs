@@ -63,7 +63,7 @@ public class AccessTokenController : ControllerBase
         }
 
         var token = new AccessToken {
-            CreationDate = DateTime.Now,
+            CreationDate = DateTime.UtcNow,
             Token = Guid.NewGuid().ToString(),
             Duration = durationInSeconds,
             UserId = userId,
@@ -112,7 +112,7 @@ public class AccessTokenController : ControllerBase
     public async Task<ActionResult<List<AccessTokenForTransfer>>> GetValidAccessTokens()
     {
         var validAccessTokens = await _context.AccessTokens
-            .Where(token => token.CreationDate.AddSeconds(token.Duration) > DateTime.Now).ToListAsync();
+            .Where(token => token.CreationDate.AddSeconds(token.Duration) > DateTime.UtcNow).ToListAsync();
 
         var validAccessTokensForTransfer = AccessTokenForTransfer.ConvertForTransfer(validAccessTokens);
         validAccessTokensForTransfer = await FillUserNameField(validAccessTokensForTransfer);
@@ -133,7 +133,7 @@ public class AccessTokenController : ControllerBase
             return BadRequest("User not found.");
 
         var validAccessTokens = await _context.AccessTokens
-            .Where(token => token.CreationDate.AddSeconds(token.Duration) > DateTime.Now && token.UserId == userId).ToListAsync();
+            .Where(token => token.CreationDate.AddSeconds(token.Duration) > DateTime.UtcNow && token.UserId == userId).ToListAsync();
 
         var validAccessTokensForTransfer = AccessTokenForTransfer.ConvertForTransfer(validAccessTokens);
         validAccessTokensForTransfer = await FillUserNameField(validAccessTokensForTransfer);

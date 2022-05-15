@@ -12,8 +12,11 @@ public class AccessTokenForTransfer
 
     public AccessTokenForTransfer(AccessToken token)
     {
+        var creationDateToUnix = (int)Math.Truncate(token.CreationDate.Subtract(DateTime.UnixEpoch).TotalSeconds);
+        var expiryDateToUnix = creationDateToUnix + token.Duration;
+
         AccessTokenId = token.AccessTokenId;
-        ExpiryDate = token.CreationDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+        ExpiryDate = expiryDateToUnix;
         Token = token.Token;
         UserId = token.UserId;
     }
@@ -23,7 +26,7 @@ public class AccessTokenForTransfer
     #region Properties
 
     public int AccessTokenId { get; set; }
-    public string ExpiryDate { get; set; }
+    public int ExpiryDate { get; set; }
     public string Token { get; set; }
     public int UserId { get; set; }
     public string? UserName { get; set; }
