@@ -13,7 +13,7 @@
         (click)="this.hideUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == true">Hide all</button>
     </div>
   </div>
-  <div id="userlist" class="d-flex align-content-start flex-wrap mt-2"
+  <div id="userList" class="d-flex align-content-start flex-wrap mt-2"
     *ngIf="this.isShowingUsers == true">
     <app-tokengen-usercard
       *ngFor="let user of this.users"

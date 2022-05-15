@@ -19,8 +19,9 @@ public class AccessTokenController : ControllerBase
 {
     #region Static Members
 
-    private const int MinDurationInSeconds = 1;
     private const int MaxDurationInSeconds = 60;
+
+    private const int MinDurationInSeconds = 1;
 
     #endregion
 
@@ -47,7 +48,7 @@ public class AccessTokenController : ControllerBase
     /// <param name="userId">userId to assign the token to</param>
     /// <param name="durationInSeconds">duration of the token</param>
     [HttpPost("{userId}/{durationInSeconds}")]
-    public async Task<ActionResult<List<AccessToken>>> GenerateAccessToken(int userId, int durationInSeconds)
+    public async Task<IActionResult> GenerateAccessToken(int userId, int durationInSeconds)
     {
         var user = await _context.Users.FindAsync(userId);
 
@@ -65,21 +66,23 @@ public class AccessTokenController : ControllerBase
             CreationDate = DateTime.Now,
             Token = Guid.NewGuid().ToString(),
             Duration = durationInSeconds,
-            UserId = userId
+            UserId = userId,
         };
 
         _context.AccessTokens.Add(token);
         await _context.SaveChangesAsync();
-        return Ok(token);
+        return Ok();
     }
 
     /// <summary>
     ///     Returns all the AccessTokens in the db (expired included)
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<List<AccessToken>>> GetAllAccessTokens()
+    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetAllAccessTokens()
     {
-        return Ok(await _context.AccessTokens.ToListAsync());
+        var accessTokens = await _context.AccessTokens.ToListAsync();
+        var validAccessTokensForTransfer = AccessTokenForTransfer.ConvertForTransfer(accessTokens);
+        return Ok(validAccessTokensForTransfer);
     }
 
     /// <summary>
@@ -87,7 +90,7 @@ public class AccessTokenController : ControllerBase
     /// </summary>
     /// <param name="userId">userId of the owner</param>
     [HttpGet("{userId}")]
-    public async Task<ActionResult<List<AccessToken>>> GetAllUserAccessTokens(int userId)
+    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetAllUserAccessTokens(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
 
@@ -96,19 +99,25 @@ public class AccessTokenController : ControllerBase
 
         var accessTokens = await _context.AccessTokens.Where(token => token.UserId == userId).ToListAsync();
 
-        return Ok(accessTokens);
+        var validAccessTokensForTransfer = AccessTokenForTransfer.ConvertForTransfer(accessTokens);
+        validAccessTokensForTransfer = await FillUserNameField(validAccessTokensForTransfer);
+
+        return Ok(validAccessTokensForTransfer);
     }
 
     /// <summary>
     ///     Returns all the AccessTokens in the db (expired excluded)
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<List<AccessToken>>> GetValidAccessTokens()
+    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetValidAccessTokens()
     {
         var validAccessTokens = await _context.AccessTokens
             .Where(token => token.CreationDate.AddSeconds(token.Duration) > DateTime.Now).ToListAsync();
 
-        return Ok(validAccessTokens);
+        var validAccessTokensForTransfer = AccessTokenForTransfer.ConvertForTransfer(validAccessTokens);
+        validAccessTokensForTransfer = await FillUserNameField(validAccessTokensForTransfer);
+
+        return Ok(validAccessTokensForTransfer);
     }
 
     /// <summary>
@@ -116,7 +125,7 @@ public class AccessTokenController : ControllerBase
     /// </summary>
     /// <param name="userId">userId of the owner</param>
     [HttpGet("{userId}")]
-    public async Task<ActionResult<List<AccessToken>>> GetValidUserAccessTokens(int userId)
+    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetValidUserAccessTokens(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
 
@@ -126,7 +135,40 @@ public class AccessTokenController : ControllerBase
         var validAccessTokens = await _context.AccessTokens
             .Where(token => token.CreationDate.AddSeconds(token.Duration) > DateTime.Now && token.UserId == userId).ToListAsync();
 
-        return Ok(validAccessTokens);
+        var validAccessTokensForTransfer = AccessTokenForTransfer.ConvertForTransfer(validAccessTokens);
+        validAccessTokensForTransfer = await FillUserNameField(validAccessTokensForTransfer);
+
+        return Ok(validAccessTokensForTransfer);
+    }
+
+    #endregion
+
+    #region Methods - Private
+
+    /// <summary>
+    ///     Fills the "UserName" field for each AccessToken
+    /// </summary>
+    /// <param name="accessTokensForTransfer">AccessTokens to be filled</param>
+    private async Task<IEnumerable<AccessTokenForTransfer>> FillUserNameField(IEnumerable<AccessTokenForTransfer> accessTokensForTransfer)
+    {
+        foreach (var accessTokenForTransfer in accessTokensForTransfer) {
+            var user = await _context.Users.FindAsync(accessTokenForTransfer.UserId);
+            accessTokenForTransfer.UserName = user.UserName;
+        }
+
+        return accessTokensForTransfer;
+    }
+
+    /// <summary>
+    ///     Fills the "UserName" field for the AccessToken
+    /// </summary>
+    /// <param name="accessTokenForTransfer">AccessToken to be filled</param>
+    private async Task<AccessTokenForTransfer> FillUserNameField(AccessTokenForTransfer accessTokenForTransfer)
+    {
+        var user = await _context.Users.FindAsync(accessTokenForTransfer.UserId);
+        accessTokenForTransfer.UserName = user.UserName;
+
+        return accessTokenForTransfer;
     }
 
     #endregion

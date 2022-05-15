@@ -23,8 +23,7 @@ export class TokengenUserService {
         tap(() => {
           this._refreshNeeded$.next();
         })
-      )
-      .subscribe();
+      ).subscribe();
   }
 
   getAllUsers(): Observable<User[]> {

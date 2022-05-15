@@ -1,7 +1,7 @@
 export interface AccessToken {
   accessTokenId: number;
-  creationDate: string;
-  duration: number;
+  expiryDate: string;
   token: string;
   userId: number;
+  userName: string;
 }

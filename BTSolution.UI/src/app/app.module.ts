@@ -9,6 +9,7 @@ import { TokengenUserbarComponent } from './shared/tokengen-userbar/tokengen-use
 import { TokengenUsercardComponent } from './shared/tokengen-usercard/tokengen-usercard.component';
 import { TokengenAccesstokenbarComponent } from './shared/tokengen-accesstokenbar/tokengen-accesstokenbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TokengenAccesstokencardComponent } from './shared/tokengen-accesstokencard/tokengen-accesstokencard.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TokengenTitleComponent,
     TokengenUserbarComponent,
     TokengenUsercardComponent,
-    TokengenAccesstokenbarComponent
+    TokengenAccesstokenbarComponent,
+    TokengenAccesstokencardComponent
   ],
   imports: [
     BrowserModule,

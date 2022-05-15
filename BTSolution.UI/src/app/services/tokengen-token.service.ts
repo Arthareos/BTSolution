@@ -22,7 +22,7 @@ export class TokengenTokenService {
         tap(() => {
           this._refreshNeeded$.next();
         })
-      );
+      ).subscribe();
   }
 
   getAllAccessTokens(): Observable<AccessToken[]> {
