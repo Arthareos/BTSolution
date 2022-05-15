@@ -3,10 +3,10 @@
     <div class="p-2">
       <p class="fw-bold" *ngIf="this.users.length == 0">Currently there are no users registered</p>
       <p class="fw-bold" *ngIf="this.users.length == 1">Currently there is {{this.users.length}} user registered</p>
-      <p class="fw-bold" *ngIf="this.users.length > 0">Currently there are {{this.users.length}} users registered</p>
+      <p class="fw-bold" *ngIf="this.users.length > 1">Currently there are {{this.users.length}} users registered</p>
     </div>
     <div class="ms-auto p-2">
-      <button type="button" class="btn btn-success ms-2">Add</button>
+      <button type="button" class="btn btn-success ms-2" (click)="open(userAddModal)">Create new</button>
       <button type="button" class="btn btn-primary ms-2"
         (click)="this.showUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == false">Show all</button>
       <button type="button" class="btn btn-primary ms-2"
@@ -23,3 +23,19 @@
       ></app-tokengen-usercard>
   </div>
 </div>
+
+<ng-template #userAddModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Create new user</h5>
+  </div>
+  <div class="modal-body">
+    <div class="form-floating">
+      <input type="text" class="form-control" #userName (keyup)="getUserName(userName.value)">
+      <label for="user-name">Name</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.close()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="this.addUser(); modal.close()">Create</button>
+  </div>
+</ng-template>

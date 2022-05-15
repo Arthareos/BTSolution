@@ -1,3 +1,4 @@
+import { TokengenTokenService } from './tokengen-token.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { User } from './interfaces/user';
@@ -9,7 +10,7 @@ import { environment } from 'src/environments/environment.prod';
 })
 export class TokengenUserService {
   private _refreshNeeded$ = new Subject<void>();
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private tokenService: TokengenTokenService) {}
 
   get refreshNeeded$() {
     return this._refreshNeeded$;
@@ -17,12 +18,13 @@ export class TokengenUserService {
 
   addUser(user: User): void {
     this.http
-      .post<User[]>(`${environment.apiUrl}/User/AddUsers`, user)
+      .post<User[]>(`${environment.apiUrl}/User/AddUser`, user)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();
         })
-      );
+      )
+      .subscribe();
   }
 
   getAllUsers(): Observable<User[]> {
@@ -37,14 +39,12 @@ export class TokengenUserService {
     this.http
       .delete(`${environment.apiUrl}/User/RemoveUser/${userId}`)
       .subscribe({
-        next: data => {
-          console.log(`Success: ${data}`);
-        },
         error: error => {
           console.log(`Error: ${error}`);
         },
         complete: () => {
           this._refreshNeeded$.next();
+          this.tokenService.refreshNeeded$.next();
         }
       });
   }
@@ -53,14 +53,12 @@ export class TokengenUserService {
     this.http
       .put(`${environment.apiUrl}/User/UpdateUser`, user)
       .subscribe({
-        next: data => {
-          console.log(`Success: ${data}`);
-        },
         error: error => {
           console.log(`Error: ${error}`);
         },
         complete: () => {
           this._refreshNeeded$.next();
+          this.tokenService.refreshNeeded$.next();
         }
       });
   }

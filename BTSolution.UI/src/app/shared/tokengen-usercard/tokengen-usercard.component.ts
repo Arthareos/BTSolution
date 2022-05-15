@@ -1,3 +1,4 @@
+import { TokengenUserbarComponent } from './../tokengen-userbar/tokengen-userbar.component';
 import { Component, Input } from '@angular/core';
 import { TokengenUserService } from 'src/app/services/tokengen-user.service';
 

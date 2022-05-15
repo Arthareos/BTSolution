@@ -1,6 +1,7 @@
 import { TokengenUserService } from './../../services/tokengen-user.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { User } from 'src/app/services/interfaces/user';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tokengen-userbar',
@@ -11,7 +12,9 @@ export class TokengenUserbarComponent implements OnInit {
   public users: Array<User> = [];
   public isShowingUsers: boolean = false;
 
-  constructor(private userService: TokengenUserService) { }
+  public userName: string = "";
+
+  constructor(private userService: TokengenUserService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.userService.refreshNeeded$.subscribe(() => this.getAllUsers())
@@ -34,4 +37,16 @@ export class TokengenUserbarComponent implements OnInit {
     });
   }
 
+  addUser(): void {
+    var newUser: User = {userId: 0, userName: this.userName};
+    this.userService.addUser(newUser);
+  }
+
+  getUserName(name: string): void {
+    this.userName = name;
+  }
+
+  open(content: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-title'}).result;
+  }
 }
