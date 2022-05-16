@@ -27,7 +27,6 @@ public class AccessTokenController : ControllerBase
 
     #region Members
 
-    private readonly DataContext _context;
     private readonly AccessTokenService _service;
 
     #endregion
@@ -36,7 +35,6 @@ public class AccessTokenController : ControllerBase
 
     public AccessTokenController(DataContext context, AccessTokenService service)
     {
-        _context = context;
         _service = service;
     }
 
