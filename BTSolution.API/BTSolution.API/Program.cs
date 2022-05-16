@@ -5,6 +5,8 @@
 //   --------------------------------------------------------------------------------------------
 
 using BTSolution.API.Data;
+using BTSolution.API.Interfaces;
+using BTSolution.API.Services;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +19,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccessTokenService, AccessTokenService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
