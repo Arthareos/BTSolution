@@ -25,7 +25,7 @@ public class UserController : ControllerBase
 
     #region Constructors
 
-    public UserController(DataContext context, UserService service)
+    public UserController(UserService service)
     {
         _userService = service;
     }
