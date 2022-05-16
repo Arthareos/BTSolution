@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TokengenUsercardComponent } from './tokengen-usercard.component';
+import { UserBarComponent } from './user-bar.component';
 
-describe('TokengenUsercardComponent', () => {
-  let component: TokengenUsercardComponent;
-  let fixture: ComponentFixture<TokengenUsercardComponent>;
+describe('UserBarComponent', () => {
+  let component: UserBarComponent;
+  let fixture: ComponentFixture<UserBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TokengenUsercardComponent ]
+      declarations: [ UserBarComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TokengenUsercardComponent);
+    fixture = TestBed.createComponent(UserBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

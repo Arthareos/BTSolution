@@ -1,12 +1,12 @@
-import { TokengenTokenService } from './../../services/tokengen-token.service';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {TokenService} from "../../services/token-service/token.service";
 
 @Component({
-  selector: 'app-tokengen-accesstokencard',
-  templateUrl: './tokengen-accesstokencard.component.html',
-  styleUrls: ['./tokengen-accesstokencard.component.scss']
+  selector: 'app-token-card',
+  templateUrl: './token-card.component.html',
+  styleUrls: ['./token-card.component.scss']
 })
-export class TokengenAccesstokencardComponent {
+export class TokenCardComponent implements OnInit {
   @Input("accessTokenId") accessTokenId: number = 0;
   @Input("expiryDate") expiryDate: number = 0;
   @Input("token") token: string = "";
@@ -16,7 +16,7 @@ export class TokengenAccesstokencardComponent {
   public timeLeft: number = 0;
   private countdownInterval: any;
 
-  constructor(private tokenService: TokengenTokenService) {}
+  constructor(private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.countdownInterval = setInterval(() => {
@@ -27,9 +27,5 @@ export class TokengenAccesstokencardComponent {
         clearInterval(this.countdownInterval);
       }
     }, 1000);
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.countdownInterval);
   }
 }

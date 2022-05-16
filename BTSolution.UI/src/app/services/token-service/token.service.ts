@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { AccessToken } from './interfaces/accessToken';
+import { AccessToken } from "../../interfaces/access-token";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TokengenTokenService {
+export class TokenService {
   private _refreshNeeded$ = new Subject<void>();
   constructor(private http: HttpClient) {}
 

@@ -1,16 +1,16 @@
-import { TokengenTokenService } from './tokengen-token.service';
+import { TokenService } from '../token-service/token.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { User } from './interfaces/user';
 import { Observable, Subject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { User } from "../../interfaces/user";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TokengenUserService {
+export class UserService {
   private _refreshNeeded$ = new Subject<void>();
-  constructor(private http: HttpClient, private tokenService: TokengenTokenService) {}
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
   get refreshNeeded$() {
     return this._refreshNeeded$;

@@ -1,20 +1,20 @@
-import { TokengenUserService } from './../../services/tokengen-user.service';
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { User } from 'src/app/services/interfaces/user';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from "../../services/user-service/user.service";
+import {User} from "../../interfaces/user";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: 'app-tokengen-userbar',
-  templateUrl: './tokengen-userbar.component.html',
-  styleUrls: ['./tokengen-userbar.component.scss']
+  selector: 'app-user-bar',
+  templateUrl: './user-bar.component.html',
+  styleUrls: ['./user-bar.component.scss']
 })
-export class TokengenUserbarComponent implements OnInit {
+export class UserBarComponent implements OnInit {
   public users: Array<User> = [];
   public isShowingUsers: boolean = false;
 
   public userName: string = "";
 
-  constructor(private userService: TokengenUserService, private modalService: NgbModal) { }
+  constructor(private userService: UserService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.userService.refreshNeeded$.subscribe(() => this.getAllUsers())
@@ -37,7 +37,11 @@ export class TokengenUserbarComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (v) => this.users = v,
       error: (e) => console.log(e),
-      complete: () => {}
+      complete: () => {
+        if (this.users.length == 0) {
+          this.isShowingUsers = false;
+        }
+      }
     });
   }
 
