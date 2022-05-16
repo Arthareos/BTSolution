@@ -5,7 +5,6 @@
 //   --------------------------------------------------------------------------------------------
 
 using BTSolution.API.Data;
-using BTSolution.API.Interfaces;
 using BTSolution.API.Services;
 
 using Microsoft.EntityFrameworkCore;
