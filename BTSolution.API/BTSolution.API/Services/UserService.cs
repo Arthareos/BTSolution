@@ -25,9 +25,9 @@ public class UserService : IUserService
 
     #region Constructors
 
-    public UserService(DataContext context)
+    public UserService(DbContextOptions<DataContext> dbOptions)
     {
-        _context = context;
+        _context = new DataContext(dbOptions);
     }
 
     #endregion

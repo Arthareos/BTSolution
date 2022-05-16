@@ -25,9 +25,9 @@ public class AccessTokenService : IAccessTokenService
 
     #region Constructors
 
-    public AccessTokenService(DataContext context)
+    public AccessTokenService(DbContextOptions<DataContext> dbOptions)
     {
-        _context = context;
+        _context = new DataContext(dbOptions);
     }
 
     #endregion
