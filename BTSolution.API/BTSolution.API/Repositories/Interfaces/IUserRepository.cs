@@ -7,21 +7,16 @@
 using BTSolution.API.Models;
 
 
-namespace BTSolution.API.Interfaces;
+namespace BTSolution.API.Repositories.Interfaces;
 
-public interface IUserService
+public interface IUserRepository
 {
     #region Methods - Public
 
-    public Task<User> AddUser(User user);
-
-    public Task<List<User>> GetAllUsers();
-
-    public Task<User?> GetUser(int userId);
-
-    public void RemoveUser(int userId);
-
-    public void UpdateUser(User requestUser);
+    void CreateUser(User user);
+    void DeleteUser(int userId);
+    Task<List<User>> GetUsers();
+    Task<User> GetUser(int userId);
 
     #endregion
 }
