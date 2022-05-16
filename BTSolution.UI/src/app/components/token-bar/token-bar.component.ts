@@ -1,21 +1,21 @@
-import { AccessToken } from './../../services/interfaces/accessToken';
-import { TokengenTokenService } from './../../services/tokengen-token.service';
-import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {AccessToken} from "../../interfaces/access-token";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {TokenService} from "../../services/token-service/token.service";
 
 @Component({
-  selector: 'app-tokengen-accesstokenbar',
-  templateUrl: './tokengen-accesstokenbar.component.html',
-  styleUrls: ['./tokengen-accesstokenbar.component.scss']
+  selector: 'app-token-bar',
+  templateUrl: './token-bar.component.html',
+  styleUrls: ['./token-bar.component.scss']
 })
-export class TokengenAccesstokenbarComponent implements OnInit {
+export class TokenBarComponent implements OnInit {
   public accessTokens: Array<AccessToken> = [];
   public isShowingAccessTokens: boolean = false;
 
   public userId: number = 0;
   public durationInSeconds: number = 0;
 
-  constructor(private accessTokenService: TokengenTokenService, private modalService: NgbModal) {}
+  constructor(private accessTokenService: TokenService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.accessTokenService.refreshNeeded$.subscribe(() => this.getAllValidAccessTokens())
@@ -31,12 +31,14 @@ export class TokengenAccesstokenbarComponent implements OnInit {
   }
 
   getAllValidAccessTokens(): void {
-    this.accessTokens = [];
-
     this.accessTokenService.getAllValidAccessTokens().subscribe({
       next: (v) => this.accessTokens = v,
       error: (e) => console.log(e),
-      complete: () => {}
+      complete: () => {
+        if (this.accessTokens.length == 0) {
+          this.isShowingAccessTokens = false;
+        }
+      }
     });
   }
 

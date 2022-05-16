@@ -8,14 +8,14 @@
     <div class="ms-auto p-2">
       <button type="button" class="btn btn-success ms-2" (click)="open(generateAccessTokenModal)">Generate new</button>
       <button type="button" class="btn btn-primary ms-2"
-        (click)="this.showAccessTokens()" *ngIf="this.accessTokens.length > 0 && this.isShowingAccessTokens == false">Show all</button>
+              (click)="this.showAccessTokens()" *ngIf="this.accessTokens.length > 0 && this.isShowingAccessTokens == false">Show all</button>
       <button type="button" class="btn btn-primary ms-2"
-        (click)="this.hideAccessTokens()" *ngIf="this.accessTokens.length > 0 && this.isShowingAccessTokens == true">Hide all</button>
+              (click)="this.hideAccessTokens()" *ngIf="this.accessTokens.length > 0 && this.isShowingAccessTokens == true">Hide all</button>
     </div>
   </div>
   <div id="accessTokenList" class="d-flex align-content-start flex-wrap mt-2"
-    *ngIf="this.isShowingAccessTokens == true">
-    <app-tokengen-accesstokencard
+       *ngIf="this.isShowingAccessTokens == true">
+    <app-token-card
       *ngFor="let accessToken of this.accessTokens"
       class="col-12"
       [accessTokenId]="accessToken.accessTokenId"
@@ -23,7 +23,7 @@
       [token]="accessToken.token"
       [userId]="accessToken.userId"
       [userName]="accessToken.userName"
-      ></app-tokengen-accesstokencard>
+    ></app-token-card>
   </div>
 </div>
 
@@ -34,11 +34,11 @@
   <div class="modal-body">
     <div class="form-floating mb-3">
       <input type="number" class="form-control" #userId (keyup)="getUserId(userId.value)">
-      <label for="user-name">User ID</label>
+      <label>User ID</label>
     </div>
     <div class="form-floating">
       <input type="text" class="form-control" #duration (keyup)="getDuration(duration.value)">
-      <label for="user-name">Duration</label>
+      <label>Duration</label>
     </div>
   </div>
   <div class="modal-footer">

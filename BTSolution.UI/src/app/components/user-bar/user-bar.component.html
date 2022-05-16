@@ -8,19 +8,19 @@
     <div class="ms-auto p-2">
       <button type="button" class="btn btn-success ms-2" (click)="open(userAddModal)">Create new</button>
       <button type="button" class="btn btn-primary ms-2"
-        (click)="this.showUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == false">Show all</button>
+              (click)="this.showUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == false">Show all</button>
       <button type="button" class="btn btn-primary ms-2"
-        (click)="this.hideUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == true">Hide all</button>
+              (click)="this.hideUsers()" *ngIf="this.users.length > 0 && this.isShowingUsers == true">Hide all</button>
     </div>
   </div>
   <div id="userList" class="d-flex align-content-start flex-wrap mt-2"
-    *ngIf="this.isShowingUsers == true">
-    <app-tokengen-usercard
+       *ngIf="this.isShowingUsers == true">
+    <app-user-card
       *ngFor="let user of this.users"
       class="col-12"
       [userId]="user.userId"
       [userName]="user.userName"
-      ></app-tokengen-usercard>
+    ></app-user-card>
   </div>
 </div>
 
@@ -31,7 +31,7 @@
   <div class="modal-body">
     <div class="form-floating">
       <input type="text" class="form-control" #userName (keyup)="getUserName(userName.value)">
-      <label for="user-name">Name</label>
+      <label>Name</label>
     </div>
   </div>
   <div class="modal-footer">
