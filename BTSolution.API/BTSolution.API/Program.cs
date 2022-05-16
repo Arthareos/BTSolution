@@ -1,10 +1,12 @@
-//   --------------------------------------------------------------------------------------------
-//   <Copyright>
-//       Copyright © 2022 Simone Di Fonzo. All rights reserved.
-//   </Copyright>
-//   --------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
+// <Copyright>
+//     Copyright ï¿½ 2022 Simone Di Fonzo. All rights reserved.
+// </Copyright>
+// --------------------------------------------------------------------------------------------
 
 using BTSolution.API.Data;
+using BTSolution.API.Repositories;
+using BTSolution.API.Repositories.Interfaces;
 using BTSolution.API.Services;
 
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +21,12 @@ builder.Services.AddDbContext<DataContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAccessTokenRepository, AccessTokenRepository>();
+
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AccessTokenService>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -36,12 +42,7 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
-app.UseCors(options => {
-    options
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-});
+app.UseCors(options => { options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
 
 app.UseAuthorization();
 

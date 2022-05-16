@@ -33,7 +33,7 @@ public class AccessTokenController : ControllerBase
 
     #region Constructors
 
-    public AccessTokenController(DataContext context, AccessTokenService service)
+    public AccessTokenController(AccessTokenService service)
     {
         _service = service;
     }
@@ -69,57 +69,12 @@ public class AccessTokenController : ControllerBase
     }
 
     /// <summary>
-    ///     Asks the AccessTokenService for all the AccessTokens in the db (expired included)
-    /// </summary>
-    [HttpGet]
-    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetAllAccessTokens()
-    {
-        return Ok(await _service.GetAllAccessTokens());
-    }
-
-    /// <summary>
-    ///     Asks the AccessTokenService for all the AccessTokens in the db (expired included) owned by the user
-    /// </summary>
-    /// <param name="userId">userId of the owner</param>
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetAllUserAccessTokens(int userId)
-    {
-        if (userId < 1)
-            return BadRequest();
-
-        try {
-            var accessTokens = await _service.GetAllUserAccessTokens(userId);
-            return Ok(accessTokens);
-        } catch {
-            return BadRequest();
-        }
-    }
-
-    /// <summary>
     ///     Asks the AccessTokenService for all the AccessTokens in the db (NOT expired)
     /// </summary>
     [HttpGet]
     public async Task<ActionResult<List<AccessTokenForTransfer>>> GetValidAccessTokens()
     {
         return Ok(await _service.GetValidAccessTokens());
-    }
-
-    /// <summary>
-    ///     Asks the AccessTokenService for all the AccessTokens in the db (NOT expired) owned by the user
-    /// </summary>
-    /// <param name="userId">userId of the owner</param>
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<List<AccessTokenForTransfer>>> GetValidUserAccessTokens(int userId)
-    {
-        if (userId < 1)
-            return BadRequest();
-
-        try {
-            var accessTokens = await _service.GetValidUserAccessTokens(userId);
-            return Ok(accessTokens);
-        } catch {
-            return BadRequest();
-        }
     }
 
     #endregion

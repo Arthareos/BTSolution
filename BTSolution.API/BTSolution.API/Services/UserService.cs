@@ -4,30 +4,25 @@
 // </Copyright>
 // --------------------------------------------------------------------------------------------
 
-using System.Data;
-
-using BTSolution.API.Data;
-using BTSolution.API.Interfaces;
 using BTSolution.API.Models;
-
-using Microsoft.EntityFrameworkCore;
+using BTSolution.API.Repositories.Interfaces;
 
 
 namespace BTSolution.API.Services;
 
-public class UserService : IUserService
+public class UserService
 {
     #region Members
 
-    private readonly DataContext _context;
+    private readonly IUserRepository _userRepository;
 
     #endregion
 
     #region Constructors
 
-    public UserService(DbContextOptions<DataContext> dbOptions)
+    public UserService(IUserRepository userRepository)
     {
-        _context = new DataContext(dbOptions);
+        _userRepository = userRepository;
     }
 
     #endregion
@@ -37,12 +32,11 @@ public class UserService : IUserService
     /// <summary>
     ///     Adds the user to the db
     /// </summary>
-    /// <param name="user">user object to be added</param>
-    public async Task<User> AddUser(User user)
+    /// <param name="userName"></param>
+    public void AddUser(string userName)
     {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return user;
+        User user = new() {UserName = userName};
+        _userRepository.CreateUser(user);
     }
 
     /// <summary>
@@ -50,66 +44,16 @@ public class UserService : IUserService
     /// </summary>
     public async Task<List<User>> GetAllUsers()
     {
-        return await _context.Users.ToListAsync();
-    }
-
-    /// <summary>
-    ///     Returns only the requested user
-    /// </summary>
-    /// <param name="userId">id for the requested user</param>
-    public async Task<User?> GetUser(int userId)
-    {
-        return await _context.Users.FindAsync(userId);
+        return await _userRepository.GetUsers();
     }
 
     /// <summary>
     ///     Removes the user from the db including his accessTokens
     /// </summary>
     /// <param name="userId"></param>
-    public async void RemoveUser(int userId)
+    public void RemoveUser(int userId)
     {
-        var user = await _context.Users.FindAsync(userId);
-        _context.Users.Remove(user);
-        RemoveAllUserAccessTokens(userId);
-        await _context.SaveChangesAsync();
-    }
-
-    /// <summary>
-    ///     Updates the user using the data provided
-    /// </summary>
-    /// <param name="requestUser">new user object</param>
-    public async void UpdateUser(User requestUser)
-    {
-        var user = await _context.Users.FindAsync(requestUser.UserId);
-
-        if (user == null)
-            throw new DataException();
-
-        user.UserName = requestUser.UserName;
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
-    }
-
-    #endregion
-
-    #region Methods - Private
-
-    /// <summary>
-    ///     Removes all the AccessTokens assigned to a user
-    /// </summary>
-    /// ///
-    /// <param name="userId">id for the requested user</param>
-    private void RemoveAllUserAccessTokens(int userId)
-    {
-        var user = _context.Users.FindAsync(userId).Result;
-
-        if (user == null)
-            return;
-
-        var userAccessTokenList = _context.AccessTokens.Where(token => token.UserId == userId).ToListAsync().Result;
-
-        _context.AccessTokens.RemoveRange(userAccessTokenList);
-        _context.SaveChanges();
+        _userRepository.DeleteUser(userId);
     }
 
     #endregion

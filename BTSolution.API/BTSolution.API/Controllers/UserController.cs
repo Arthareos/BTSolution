@@ -4,7 +4,6 @@
 // </Copyright>
 // --------------------------------------------------------------------------------------------
 
-using BTSolution.API.Data;
 using BTSolution.API.Models;
 using BTSolution.API.Services;
 
@@ -38,14 +37,14 @@ public class UserController : ControllerBase
     ///     Adds the user to the db
     /// </summary>
     /// <param name="user">user object to be added</param>
-    [HttpPost]
-    public async Task<IActionResult> AddUser(User user)
+    [HttpPost("{userName}")]
+    public async Task<IActionResult> AddUser(string userName)
     {
-        if (string.IsNullOrEmpty(user.UserName)) {
+        if (string.IsNullOrEmpty(userName)) {
             return BadRequest();
         }
 
-        await _userService.AddUser(user);
+        _userService.AddUser(userName);
         return Ok();
     }
 
@@ -57,24 +56,6 @@ public class UserController : ControllerBase
     {
         var userList = await _userService.GetAllUsers();
         return Ok(userList);
-    }
-
-    /// <summary>
-    ///     Returns only the requested user
-    /// </summary>
-    /// <param name="userId">id for the requested user</param>
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<User>> GetUser(int userId)
-    {
-        if (userId < 0)
-            return BadRequest();
-
-        var user = await _userService.GetUser(userId);
-
-        if (user == null)
-            return BadRequest();
-
-        return Ok(user);
     }
 
     /// <summary>
@@ -90,24 +71,6 @@ public class UserController : ControllerBase
         _userService.RemoveUser(userId);
 
         return Ok();
-    }
-
-    /// <summary>
-    ///     Updates the user using the data provided
-    /// </summary>
-    /// <param name="requestUser">new user object</param>
-    [HttpPut]
-    public async Task<ActionResult<List<User>>> UpdateUser(User requestUser)
-    {
-        if (string.IsNullOrEmpty(requestUser.UserName))
-            return BadRequest();
-
-        try {
-            _userService.UpdateUser(requestUser);
-            return Ok();
-        } catch {
-            return BadRequest();
-        }
     }
 
     #endregion
