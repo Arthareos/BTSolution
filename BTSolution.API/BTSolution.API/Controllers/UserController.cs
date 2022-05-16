@@ -1,14 +1,14 @@
-﻿//   --------------------------------------------------------------------------------------------
-//   <Copyright>
-//       Copyright © 2022 Simone Di Fonzo. All rights reserved.
-//   </Copyright>
-//   --------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------
+// <Copyright>
+//     Copyright © 2022 Simone Di Fonzo. All rights reserved.
+// </Copyright>
+// --------------------------------------------------------------------------------------------
 
 using BTSolution.API.Data;
 using BTSolution.API.Models;
+using BTSolution.API.Services;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace BTSolution.API.Controllers;
@@ -19,15 +19,15 @@ public class UserController : ControllerBase
 {
     #region Members
 
-    private readonly DataContext _context;
+    private readonly UserService _userService;
 
     #endregion
 
     #region Constructors
 
-    public UserController(DataContext context)
+    public UserController(DataContext context, UserService service)
     {
-        _context = context;
+        _userService = service;
     }
 
     #endregion
@@ -39,11 +39,14 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="user">user object to be added</param>
     [HttpPost]
-    public async Task<ActionResult<List<User>>> AddUser(User user)
+    public async Task<IActionResult> AddUser(User user)
     {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return Ok(user);
+        if (string.IsNullOrEmpty(user.UserName)) {
+            return BadRequest();
+        }
+
+        await _userService.AddUser(user);
+        return Ok();
     }
 
     /// <summary>
@@ -52,7 +55,8 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<User>>> GetAllUsers()
     {
-        return Ok(await _context.Users.ToListAsync());
+        var userList = await _userService.GetAllUsers();
+        return Ok(userList);
     }
 
     /// <summary>
@@ -60,16 +64,18 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="userId">id for the requested user</param>
     [HttpGet("{userId}")]
-    public async Task<ActionResult<List<User>>> GetUser(int userId)
+    public async Task<ActionResult<User>> GetUser(int userId)
     {
-        var user = await _context.Users.FindAsync(userId);
+        if (userId < 0)
+            return BadRequest();
+
+        var user = await _userService.GetUser(userId);
 
         if (user == null)
-            return BadRequest("User not found.");
+            return BadRequest();
 
         return Ok(user);
     }
-
 
     /// <summary>
     ///     Removes the user from the db including his accessTokens
@@ -78,15 +84,10 @@ public class UserController : ControllerBase
     [HttpDelete("{userId}")]
     public async Task<ActionResult<List<User>>> RemoveUser(int userId)
     {
-        var user = await _context.Users.FindAsync(userId);
+        if (userId < 0)
+            return BadRequest();
 
-        if (user == null)
-            return BadRequest("User not found.");
-
-        RemoveAllUserAccessTokens(userId);
-
-        _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
+        _userService.RemoveUser(userId);
 
         return Ok();
     }
@@ -98,36 +99,15 @@ public class UserController : ControllerBase
     [HttpPut]
     public async Task<ActionResult<List<User>>> UpdateUser(User requestUser)
     {
-        var user = await _context.Users.FindAsync(requestUser.UserId);
+        if (string.IsNullOrEmpty(requestUser.UserName))
+            return BadRequest();
 
-        if (user == null)
-            return BadRequest("User not found.");
-
-        user.UserName = requestUser.UserName;
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
-
-        return Ok();
-    }
-
-    #endregion
-
-    #region Methods - Private
-
-    /// <summary>
-    ///     Removes all the AccessTokens assigned to a user
-    /// </summary>
-    private void RemoveAllUserAccessTokens(int userId)
-    {
-        var user = _context.Users.FindAsync(userId).Result;
-
-        if (user == null)
-            return;
-
-        var userAccessTokenList = _context.AccessTokens.Where(token => token.UserId == userId).ToListAsync().Result;
-
-        _context.AccessTokens.RemoveRange(userAccessTokenList);
-        _context.SaveChanges();
+        try {
+            _userService.UpdateUser(requestUser);
+            return Ok();
+        } catch {
+            return BadRequest();
+        }
     }
 
     #endregion
