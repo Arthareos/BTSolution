@@ -42,9 +42,17 @@ public class UserService
     /// <summary>
     ///     Queries the db for all users
     /// </summary>
-    public async Task<List<User>> GetAllUsers()
+    public async Task<List<User>> GetUsers()
     {
         return await _userRepository.GetUsers();
+    }
+    
+    /// <summary>
+    ///     Queries the db for a specific user
+    /// </summary>
+    public async Task<User> GetUser(int userId)
+    {
+        return await _userRepository.GetUser(userId);
     }
 
     /// <summary>
