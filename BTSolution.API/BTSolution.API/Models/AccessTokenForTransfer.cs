@@ -10,6 +10,7 @@ public class AccessTokenForTransfer
 {
     #region Constructors
 
+    public AccessTokenForTransfer() {}
     public AccessTokenForTransfer(AccessToken token)
     {
         var creationDateToUnix = (int) Math.Truncate(token.CreationDate.Subtract(DateTime.UnixEpoch).TotalSeconds);
