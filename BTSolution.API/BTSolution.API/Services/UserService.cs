@@ -27,7 +27,7 @@ public class UserService
 
     #endregion
 
-    #region Interface Members
+    #region Methods - Public
 
     /// <summary>
     ///     Adds the user to the db

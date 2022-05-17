@@ -31,7 +31,7 @@ public class AccessTokenService
 
     #endregion
 
-    #region Interface Members
+    #region Methods - Public
 
     /// <summary>
     ///     Generate an AccessToken
@@ -63,7 +63,11 @@ public class AccessTokenService
         return await _accessTokenRepository.GetAccessTokens();
     }
 
-    public void DeleteUserAccessTokens(int userId)
+    /// <summary>
+    ///     Deletes all the user's access tokens from the db
+    /// </summary>
+    /// <param name="userId">userId of the user</param>
+    public void RemoveUserAccessTokens(int userId)
     {
         _accessTokenRepository.DeleteUserAccessTokens(userId);
     }

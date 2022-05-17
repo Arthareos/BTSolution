@@ -19,14 +19,16 @@ public class UserController : ControllerBase
     #region Members
 
     private readonly UserService _userService;
+    private readonly AccessTokenService _accessTokenService;
 
     #endregion
 
     #region Constructors
 
-    public UserController(UserService service)
+    public UserController(UserService userService, AccessTokenService accessTokenService)
     {
-        _userService = service;
+        _userService = userService;
+        _accessTokenService = accessTokenService;
     }
 
     #endregion
@@ -69,6 +71,7 @@ public class UserController : ControllerBase
             return BadRequest();
 
         _userService.RemoveUser(userId);
+        _accessTokenService.RemoveUserAccessTokens(userId);
 
         return Ok();
     }

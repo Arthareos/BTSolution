@@ -4,7 +4,6 @@
 // </Copyright>
 // --------------------------------------------------------------------------------------------
 
-using BTSolution.API.Data;
 using BTSolution.API.Models;
 using BTSolution.API.Services;
 
@@ -19,23 +18,22 @@ public class AccessTokenController : ControllerBase
 {
     #region Static Members
 
-    private const int MaxDurationInSeconds = 60;
-
     private const int MinDurationInSeconds = 1;
+    private const int MaxDurationInSeconds = 60;
 
     #endregion
 
     #region Members
 
-    private readonly AccessTokenService _service;
+    private readonly AccessTokenService _accessTokenService;
 
     #endregion
 
     #region Constructors
 
-    public AccessTokenController(AccessTokenService service)
+    public AccessTokenController(AccessTokenService accessTokenService)
     {
-        _service = service;
+        _accessTokenService = accessTokenService;
     }
 
     #endregion
@@ -61,7 +59,7 @@ public class AccessTokenController : ControllerBase
         }
 
         try {
-            _service.GenerateAccessToken(userId, durationInSeconds);
+            _accessTokenService.GenerateAccessToken(userId, durationInSeconds);
             return Ok();
         } catch {
             return BadRequest();
@@ -74,7 +72,7 @@ public class AccessTokenController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<AccessTokenForTransfer>>> GetValidAccessTokens()
     {
-        return Ok(await _service.GetValidAccessTokens());
+        return Ok(await _accessTokenService.GetValidAccessTokens());
     }
 
     #endregion
