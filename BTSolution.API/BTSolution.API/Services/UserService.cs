@@ -33,10 +33,10 @@ public class UserService
     ///     Adds the user to the db
     /// </summary>
     /// <param name="userName"></param>
-    public void AddUser(string userName)
+    public async Task<User> AddUser(string userName)
     {
         User user = new() {UserName = userName};
-        _userRepository.CreateUser(user);
+        return await _userRepository.CreateUser(user);
     }
 
     /// <summary>

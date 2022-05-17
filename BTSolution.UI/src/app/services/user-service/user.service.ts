@@ -16,9 +16,9 @@ export class UserService {
     return this._refreshNeeded$;
   }
 
-  addUser(user: User): void {
+  addUser(userName: string): void {
     this.http
-      .post<User[]>(`${environment.apiUrl}/User/AddUser`, user)
+      .post<User[]>(`${environment.apiUrl}/User/AddUser/${userName}`, null)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();
@@ -30,27 +30,9 @@ export class UserService {
     return this.http.get<User[]>(`${environment.apiUrl}/User/GetAllUsers`);
   }
 
-  getUser(userId: number): Observable<User> {
-    return this.http.get<User>(`${environment.apiUrl}/User/GetUser/${userId.toString()}`);
-  }
-
   removeUser(userId: number): void {
     this.http
       .delete(`${environment.apiUrl}/User/RemoveUser/${userId}`)
-      .subscribe({
-        error: error => {
-          console.log(`Error: ${error}`);
-        },
-        complete: () => {
-          this._refreshNeeded$.next();
-          this.tokenService.refreshNeeded$.next();
-        }
-      });
-  }
-
-  updateUser(user: User): void {
-    this.http
-      .put(`${environment.apiUrl}/User/UpdateUser`, user)
       .subscribe({
         error: error => {
           console.log(`Error: ${error}`);

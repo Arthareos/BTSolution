@@ -34,11 +34,7 @@ export class TokenBarComponent implements OnInit {
     this.accessTokenService.getAllValidAccessTokens().subscribe({
       next: (v) => this.accessTokens = v,
       error: (e) => console.log(e),
-      complete: () => {
-        if (this.accessTokens.length == 0) {
-          this.isShowingAccessTokens = false;
-        }
-      }
+      complete: () => {}
     });
   }
 

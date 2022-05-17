@@ -46,8 +46,8 @@ public class UserController : ControllerBase
             return BadRequest();
         }
 
-        _userService.AddUser(userName);
-        return Ok();
+        var user = await _userService.AddUser(userName);
+        return Ok(user);
     }
 
     /// <summary>

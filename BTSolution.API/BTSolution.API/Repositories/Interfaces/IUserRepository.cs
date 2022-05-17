@@ -13,7 +13,7 @@ public interface IUserRepository
 {
     #region Methods - Public
 
-    void CreateUser(User user);
+    Task<User> CreateUser(User user);
     void DeleteUser(int userId);
     Task<List<User>> GetUsers();
     Task<User> GetUser(int userId);

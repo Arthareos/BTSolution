@@ -34,10 +34,12 @@ public class UserRepository : IUserRepository
 
     #region Interface Members
 
-    public async void CreateUser(User user)
+    public async Task<User> CreateUser(User user)
     {
-        _context.Users.Add(user);
+        var addedUser = _context.Users.Add(user).Entity; 
         await _context.SaveChangesAsync();
+
+        return addedUser;
     }
 
     public async void DeleteUser(int userId)

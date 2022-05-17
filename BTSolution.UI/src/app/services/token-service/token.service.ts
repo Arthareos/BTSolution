@@ -25,19 +25,7 @@ export class TokenService {
       ).subscribe();
   }
 
-  getAllAccessTokens(): Observable<AccessToken[]> {
-    return this.http.get<AccessToken[]>(`${environment.apiUrl}/AccessToken/GetAllAccessTokens/`);
-  }
-
-  getAllUserAccessTokens(userId: number): Observable<AccessToken[]> {
-    return this.http.get<AccessToken[]>(`${environment.apiUrl}/AccessToken/GetAllUserAccessTokens/${userId}`);
-  }
-
   getAllValidAccessTokens(): Observable<AccessToken[]> {
     return this.http.get<AccessToken[]>(`${environment.apiUrl}/AccessToken/GetValidAccessTokens/`);
-  }
-
-  getAllValidUserAccessTokens(userId: number): Observable<AccessToken[]> {
-    return this.http.get<AccessToken[]>(`${environment.apiUrl}/AccessToken/GetValidUserAccessTokens/${userId}`);
   }
 }

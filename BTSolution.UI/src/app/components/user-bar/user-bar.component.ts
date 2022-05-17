@@ -46,8 +46,7 @@ export class UserBarComponent implements OnInit {
   }
 
   addUser(): void {
-    var newUser: User = {userId: 0, userName: this.userName};
-    this.userService.addUser(newUser);
+    this.userService.addUser(this.userName);
   }
 
   getUserName(name: string): void {
