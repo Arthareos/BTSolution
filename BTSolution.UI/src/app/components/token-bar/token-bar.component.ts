@@ -40,6 +40,8 @@ export class TokenBarComponent implements OnInit {
 
   generateAccessToken(): void {
     this.accessTokenService.generateAccessToken(this.userId, this.durationInSeconds);
+
+    setTimeout(() => { this.getAllValidAccessTokens(); }, 1000);
   }
 
   getUserId(userId: string): void {
